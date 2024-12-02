@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch học trực tuyến</title>
+  <style>
+    /* CSS */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e0f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 1000px;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .header {
+      text-align: center;
+      background-color: #00796b;
+      color: white;
+      padding: 20px 0;
+      border-radius: 10px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
+
+    .schedule-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .schedule-table th, .schedule-table td {
+      padding: 15px;
+      text-align: center;
+      border: 1px solid #ddd;
+      font-size: 1.1rem;
+    }
+
+    .schedule-table th {
+      background-color: #00796b;
+      color: white;
+    }
+
+    .schedule-table td {
+      background-color: #f9f9f9;
+      font-weight: 500;
+    }
+
+    .schedule-table td:hover {
+      background-color: #b2dfdb;
+      cursor: pointer;
+    }
+
+    .schedule-table tr:hover td {
+      background-color: #80cbc4;
+    }
+
+    .class-details {
+      background-color: #00796b;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: capitalize;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .class-details:hover {
+      background-color: #004d40;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 10px;
+      background-color: #00796b;
+      color: white;
+      border-radius: 0 0 10px 10px;
+    }
+
+    /* Thêm kiểu cho các nút và bảng */
+    .footer p {
+      margin: 0;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+
+    <!-- Tiêu đề giới thiệu Lịch học trực tuyến -->
+    <div class="header">
+      <p style="font-size: 2.0rem; color: white;">LỊCH HỌC TRỰC TUYẾN</p>
+    </div>
+    <!-- Bảng lịch học -->
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Thời gian</th>
+          <th>Thứ 2</th>
+          <th>Thứ 3</th>
+          <th>Thứ 4</th>
+          <th>Thứ 5</th>
+          <th>Thứ 6</th>
+          <th>Thứ 7</th>
+        </tr>
+      </thead>
+      <tbody id="scheduleTableBody">
+        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+      </tbody>
+    </table>
+
+    <footer class="footer">
+      <p>© 2024 Lịch học trực tuyến. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript
+
+    // Dữ liệu lịch học
+    const scheduleData = [
+      { time: "8:00 - 9:30 AM", monday: "Toán - Đại số", tuesday: "Hóa học - Phản ứng hóa học", wednesday: "Tiếng Anh - Ngữ pháp", thursday: "Vật lý - Cơ học", friday: "Sinh học - Di truyền học", saturday: "" },
+      { time: "9:30 - 11:00 AM", monday: "Lịch sử - Chiến tranh thế giới thứ 2", tuesday: "Địa lý - Địa lý Việt Nam", wednesday: "Tin học - Lập trình JavaScript", thursday: "Giáo dục công dân - Quyền và nghĩa vụ", friday: "Thể dục - Bóng đá", saturday: "Mỹ thuật - Vẽ tranh tĩnh vật" },
+      { time: "11:00 - 12:30 PM", monday: "Âm nhạc - Âm nhạc cổ điển", tuesday: "Kinh tế - Quản lý tài chính", wednesday: "", thursday: "Toán - Hình học", friday: "Vật lý - Định lý Pythagoras", saturday: "Lịch sử - Pháp luật" },
+      { time: "1:30 - 3:00 PM", monday: "", tuesday: "Thể dục - Bóng đá", wednesday: "Địa lý - Địa lý toàn cầu", thursday: "", friday: "", saturday: "Tin học - Lập trình Python" },
+      { time: "3:00 - 4:30 PM", monday: "Giáo dục công dân - Quyền và nghĩa vụ", tuesday: "", wednesday: "", thursday: "Sinh học - Phân tử học", friday: "Mỹ thuật - Vẽ tranh phong cảnh", saturday: "" }
+    ];
+
+    const scheduleTableBody = document.getElementById("scheduleTableBody");
+
+    // Hàm render bảng lịch học
+    function renderScheduleTable(data) {
+      scheduleTableBody.innerHTML = "";
+      data.forEach((row) => {
+        const tableRow = document.createElement("tr");
+
+        tableRow.innerHTML = `
+          <td>${row.time}</td>
+          <td>${renderClassCell(row.monday)}</td>
+          <td>${renderClassCell(row.tuesday)}</td>
+          <td>${renderClassCell(row.wednesday)}</td>
+          <td>${renderClassCell(row.thursday)}</td>
+          <td>${renderClassCell(row.friday)}</td>
+          <td>${renderClassCell(row.saturday)}</td>
+        `;
+
+        scheduleTableBody.appendChild(tableRow);
+      });
+    }
+
+    // Hàm tạo nút chi tiết lớp học
+    function renderClassCell(className) {
+      if (className) {
+        return `<span class="class-details" onclick="showClassDetails('${className}')">${className}</span>`;
+      }
+      return "";
+    }
+
+    // Hàm hiển thị chi tiết lớp học
+    function showClassDetails(className) {
+      alert(`Chi tiết về lớp học: ${className}`);
+    }
+
+    // Render dữ liệu ban đầu
+    renderScheduleTable(scheduleData);
+  </script>
+</body>
+</html>

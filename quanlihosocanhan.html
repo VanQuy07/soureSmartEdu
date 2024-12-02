@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Cá Nhân</title>
+    <style>
+        /* CSS */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f8fb;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .profile {
+            text-align: center;
+            position: relative;
+        }
+
+        .cover {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: -75px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .profile img.avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid white;
+            position: relative;
+            z-index: 1;
+            background: white;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            border: 4px solid #007bff;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .modal-content h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .close-modal:hover {
+            color: red;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hồ Sơ Cá Nhân</h1>
+        <div class="profile">
+            <img src="https://via.placeholder.com/600x200" alt="Ảnh bìa" class="cover" id="coverPicture">
+            <img src="https://via.placeholder.com/150" alt="Ảnh đại diện" class="avatar" id="profilePicture">
+        </div>
+        <form id="profileForm">
+            <div class="form-group">
+                <label for="name">Họ và Tên:</label>
+                <input type="text" id="name" name="name" placeholder="Nhập họ và tên" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Ngày Sinh (dd/MM/yyyy):</label>
+                <input type="text" id="dob" name="dob" placeholder="Nhập ngày sinh" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Nhập email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số Điện Thoại:</label>
+                <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại (10-15 số)" pattern="\d{10,15}" title="Nhập số điện thoại hợp lệ từ 10-15 ký tự" required>
+            </div>
+            <button type="submit">Lưu Thay Đổi</button>
+        </form>
+    </div>
+
+    <!-- Modal chỉnh sửa ảnh đại diện -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeAvatarModal">&times;</span>
+            <h3>Chỉnh Sửa Ảnh Đại Diện</h3>
+            <img src="https://via.placeholder.com/150" alt="Ảnh đại diện hiện tại" id="avatarModalImage">
+            <input type="file" id="avatarFileInput" accept="image/*">
+            <button class="btn-save" id="saveAvatar">Lưu Ảnh Đại Diện</button>
+        </div>
+    </div>
+
+    <!-- Modal chỉnh sửa ảnh bìa -->
+    <div class="modal" id="coverModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeCoverModal">&times;</span>
+            <h3>Chỉnh Sửa Ảnh Bìa</h3>
+            <img src="https://via.placeholder.com/600x200" alt="Ảnh bìa hiện tại" id="coverModalImage">
+            <input type="file" id="coverFileInput" accept="image/*">
+            <button class="btn-save" id="saveCover">Lưu Ảnh Bìa</button>
+        </div>
+    </div>
+
+    <script>
+        // Chỉnh sửa ảnh đại diện
+        const avatarPicture = document.getElementById('profilePicture');
+        const avatarModal = document.getElementById('avatarModal');
+        const avatarModalImage = document.getElementById('avatarModalImage');
+        const avatarFileInput = document.getElementById('avatarFileInput');
+        const saveAvatar = document.getElementById('saveAvatar');
+        const closeAvatarModal = document.getElementById('closeAvatarModal');
+
+        avatarPicture.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+            avatarModalImage.src = avatarPicture.src;
+        });
+
+        closeAvatarModal.addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+
+        avatarFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    avatarModalImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        saveAvatar.addEventListener('click', () => {
+            avatarPicture.src = avatarModalImage.src;
+            avatarModal.style.display = 'none';
+        });
+
+        // Chỉnh sửa ảnh bìa
+        const coverPicture = document.getElementById('coverPicture');
+        const coverModal = document.getElementById('coverModal');
+        const coverModalImage = document.getElementById('coverModalImage');
+        const coverFileInput = document.getElementById('coverFileInput');
+        const saveCover = document.getElementById('saveCover');
+        const closeCoverModal = document.getElementById('closeCoverModal');
+
+        coverPicture.addEventListener('click', () => {
+            coverModal.style.display = 'flex';
+            coverModalImage.src = coverPicture.src;
+        });
+
+        closeCoverModal.addEventListener('click', () => {
+            coverModal.style.display = 'none';
+        });
+
+        coverFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    coverModalImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        saveCover.addEventListener('click', () => {
+            coverPicture.src = coverModalImage.src;
+            coverModal.style.display = 'none';
+        });
+        // Lưu thông tin người dùng vào Local Storage
+        document.getElementById('profileForm').addEventListener('submit', (event) => {
+            event.preventDefault(); // Ngăn reload trang
+
+            // Lấy thông tin từ form
+            const name = document.getElementById('name').value;
+            const dob = document.getElementById('dob').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const avatar = document.getElementById('profilePicture').src;
+            const cover = document.getElementById('coverPicture').src;
+
+            // Lưu vào Local Storage
+            const profileData = {
+                name,
+                dob,
+                email,
+                phone,
+                avatar,
+                cover
+            };
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+            alert('Thông tin đã được lưu!');
+        });
+
+        // Tải thông tin từ Local Storage khi trang khởi động
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileData = JSON.parse(localStorage.getItem('profileData'));
+
+            if (profileData) {
+                document.getElementById('name').value = profileData.name || '';
+                document.getElementById('dob').value = profileData.dob || '';
+                document.getElementById('email').value = profileData.email || '';
+                document.getElementById('phone').value = profileData.phone || '';
+                document.getElementById('profilePicture').src = profileData.avatar || 'https://via.placeholder.com/150';
+                document.getElementById('coverPicture').src = profileData.cover || 'https://via.placeholder.com/600x200';
+            }
+        });
+    </script>
+</body>
+</html>

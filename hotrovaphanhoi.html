@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hỗ trợ và Phản hồi</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* CSS cho giao diện */
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #007bff;
+        font-size: 2em;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+
+      /* Form Styles */
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .form-group {
+        width: 100%;
+        text-align: left;
+      }
+
+      label {
+        font-size: 1em;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      /* Đánh giá mức độ hài lòng */
+      .rating-group {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+      }
+
+      .rating-group label {
+        cursor: pointer;
+        font-size: 1.5em;
+        color: #f39c12;
+      }
+
+      .rating-group input {
+        display: none;
+      }
+
+      .rating-group input:checked ~ label {
+        color: #f1c40f;
+      }
+
+      /* Phản hồi mô tả */
+      textarea {
+        width: 100%;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        resize: vertical;
+        min-height: 100px;
+        max-height: 200px;
+        outline: none;
+        transition: border-color 0.3s ease;
+      }
+
+      textarea:focus {
+        border-color: #007bff;
+      }
+
+      button {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+        text-align: left;
+      }
+
+      .success {
+        color: green;
+        font-size: 14px;
+        margin-top: 5px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Hỗ trợ và Phản hồi</h2>
+      <form id="feedback-form">
+        <!-- Đánh giá mức độ hài lòng -->
+        <div class="form-group">
+          <label for="rating">Mức độ hài lòng của bạn:</label>
+          <div class="rating-group">
+            <input type="radio" id="very-poor" name="rating" value="1" />
+            <label for="very-poor">😡</label>
+            <input type="radio" id="poor" name="rating" value="2" />
+            <label for="poor">😕</label>
+            <input type="radio" id="neutral" name="rating" value="3" />
+            <label for="neutral">😐</label>
+            <input type="radio" id="good" name="rating" value="4" />
+            <label for="good">🙂</label>
+            <input type="radio" id="very-good" name="rating" value="5" />
+            <label for="very-good">😊</label>
+        </div>        
+          <div id="rating-error" class="error"></div>
+        </div>
+
+        <!-- Phản hồi mô tả -->
+        <div class="form-group">
+          <label for="feedback">Vui lòng cung cấp phản hồi cho giảng viên:</label>
+          <textarea
+            id="feedback"
+            name="feedback"
+            placeholder="Xin vui lòng cung cấp phản hồi hoặc yêu cầu hỗ trợ của bạn."
+            maxlength="500"
+            required
+          ></textarea>
+          <div id="feedback-error" class="error"></div>
+        </div>
+
+        <!-- Nút Gửi -->
+        <button type="submit">Gửi Phản Hồi</button>
+        <div id="success-message" class="success" style="display: none;">
+          Phản hồi của bạn đã được gửi thành công!
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // Xử lý sự kiện khi gửi form
+      const feedbackForm = document.getElementById('feedback-form');
+      const feedbackTextarea = document.getElementById('feedback');
+      const ratingInputs = document.querySelectorAll('input[name="rating"]');
+      const successMessage = document.getElementById('success-message');
+      const feedbackError = document.getElementById('feedback-error');
+      const ratingError = document.getElementById('rating-error');
+
+      feedbackForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let isValid = true;
+
+        // Kiểm tra phản hồi (phải nhập và không vượt quá 500 ký tự)
+        if (feedbackTextarea.value.trim() === "") {
+          feedbackError.textContent = "Phản hồi là bắt buộc.";
+          isValid = false;
+        } else if (feedbackTextarea.value.length > 500) {
+          feedbackError.textContent = "Phản hồi không thể vượt quá 500 ký tự.";
+          isValid = false;
+        } else {
+          feedbackError.textContent = "";
+        }
+
+        // Kiểm tra đánh giá sao (phải chọn 1 mức độ đánh giá)
+        let ratingSelected = false;
+        ratingInputs.forEach((input) => {
+          if (input.checked) {
+            ratingSelected = true;
+          }
+        });
+
+        if (!ratingSelected) {
+          ratingError.textContent = "Vui lòng chọn mức độ hài lòng.";
+          isValid = false;
+        } else {
+          ratingError.textContent = "";
+        }
+
+        // Nếu form hợp lệ, hiển thị thông báo thành công
+        if (isValid) {
+          successMessage.style.display = 'block';
+          feedbackForm.reset();
+          setTimeout(() => {
+            successMessage.style.display = 'none';
+          }, 3000); // Ẩn thông báo sau 3 giây
+        }
+      });
+    </script>
+  </body>
+</html>

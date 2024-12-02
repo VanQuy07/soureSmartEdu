@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch học</title>
+  <style>
+    /* CSS */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 0;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header h1 {
+      margin: 0;
+      text-align: center; /* Căn giữa chữ */
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Hiệu ứng chữ nổi bật */
+      transition: background-color 0.3s ease; /* Thêm hiệu ứng chuyển màu nền */
+      padding: 10px;
+    }
+    /* Hiệu ứng cho bảng */
+    .class-table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng cho bảng */
+      transition: transform 0.3s ease; /* Hiệu ứng khi toàn bảng được tương tác */
+    }
+
+    .class-table:hover {
+      transform: scale(1.02); /* Phóng to nhẹ khi di chuột vào bảng */
+    }
+
+
+    .class-table th, .class-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .class-table th {
+      background-color: #4CAF50;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      text-align: left;
+    }
+
+    .class-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .class-table tr:hover {
+      background-color: #f1f1f1;
+      cursor: pointer;
+      transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu mượt mà */
+    }
+    .class-table td {
+      transition: background-color 0.3s ease;
+    }
+
+    .class-table td:hover {
+      background-color: #e0e0e0;
+    }
+    .footer {
+      margin-top: 20px;
+      padding: 15px;
+      background: linear-gradient(90deg, #4CAF50, #45a049);
+      color: white;
+      border-radius: 0 0 8px 8px;
+      font-size: 1.1rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+     /* Thanh tìm kiếm */
+    .search-bar {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-bar input {
+      width: 80%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: all 0.3s ease; /* Thêm hiệu ứng chuyển đổi cho các thuộc tính */
+    }
+
+    /* Thêm hiệu ứng khi di chuột vào ô tìm kiếm */
+    .search-bar input:hover {
+      background-color: #f0f8ff; /* Màu nền sáng khi di chuột vào */
+      border-color: #4CAF50; /* Màu viền khi di chuột vào */
+    }
+
+    /* Thêm hiệu ứng khi người dùng chọn ô tìm kiếm (focus) */
+    .search-bar input:focus {
+      background-color: #ffffff; /* Nền trắng khi focus */
+      border-color: #4CAF50; /* Màu viền xanh khi focus */
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); /* Bóng đổ màu xanh nhạt */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Lịch học</h1>
+    </header>
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Tìm kiếm môn học..."
+        oninput="filterClasses()"
+      />
+    </div>
+    <!-- Bảng lịch học -->
+    <table class="class-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Môn học</th>
+          <th>Thời gian</th>
+          <th>Phòng học</th>
+          <th>Địa điểm</th>
+        </tr>
+      </thead>
+      <tbody id="classTableBody">
+        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+      </tbody>
+    </table>
+
+    <footer class="footer">
+      <p>© 2024 Lịch học. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript
+
+    // Dữ liệu lớp học ban đầu với nhiều môn học hơn
+    // Dữ liệu lớp học cập nhật với địa chỉ
+const classSchedule = [
+  { id: 1, name: "Toán - Đại số", time: "8:00 AM", room: "Phòng 101", address: "Tòa nhà F, 120 Hoàng Minh Thảo" },
+  { id: 2, name: "Hóa học - Phản ứng hóa học", time: "10:00 AM", room: "Phòng 102", address: "Tòa nhà F, 120 Hoàng Minh Thảo" },
+  { id: 3, name: "Tiếng Anh - Ngữ pháp", time: "1:00 PM", room: "Phòng 103", address: "Tòa nhà C, 120 Hoàng Minh Thảo" },
+  { id: 4, name: "Vật lý - Cơ học", time: "3:00 PM", room: "Phòng 104", address: "Tòa nhà D, 120 Hoàng Minh Thảo" },
+  { id: 5, name: "Sinh học - Di truyền học", time: "9:00 AM", room: "Phòng 902", address: "254 Nguyễn Văn Linh" },
+  { id: 6, name: "Lịch sử - Chiến tranh thế giới thứ 2", time: "11:00 AM", room: "Phòng 204", address: "137 Nguyễn Văn Linh" },
+  { id: 7, name: "Địa lý - Địa lý Việt Nam", time: "2:00 PM", room: "Phòng 507", address: "K7/25 Quang Trung" },
+  { id: 8, name: "Tin học - Lập trình JavaScript", time: "4:00 PM", room: "Phòng 208", address: "03 Quang Trung" },
+  { id: 9, name: "Giáo dục công dân - Quyền và nghĩa vụ", time: "5:00 PM", room: "Phòng 109", address: "Tòa nhà C, 120 Hoàng Minh Thảo" },
+  { id: 10, name: "Thể dục - Bóng đá", time: "6:00 PM", room: "Sân vận động", address: "Sân vận thể thao 3" },
+  { id: 11, name: "Âm nhạc - Âm nhạc cổ điển", time: "7:00 PM", room: "Phòng 110", address: "Tòa nhà E, 120 Hoàng Minh Thảo" },
+  { id: 12, name: "Mỹ thuật - Vẽ tranh tĩnh vật", time: "8:00 AM", room: "Phòng 111", address: "Tòa nhà F, 120 Hoàng Minh Thảo" },
+  { id: 13, name: "Kinh tế - Quản lý tài chính", time: "9:30 AM", room: "Phòng 112", address: "Tòa nhà G, 120 Hoàng Minh Thảo" }
+];
+
+// Hàm render bảng lớp học cập nhật
+function renderClassTable(data) {
+  classTableBody.innerHTML = "";
+  data.forEach((classItem, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${classItem.name}</td>
+      <td>${classItem.time}</td>
+      <td>${classItem.room}</td>
+      <td>${classItem.address}</td>
+    `;
+
+    classTableBody.appendChild(row);
+  });
+}
+// Thêm sự kiện click vào từng dòng
+function addRowClickEffect() {
+  const rows = document.querySelectorAll(".class-table tbody tr");
+  rows.forEach(row => {
+    row.addEventListener("click", () => {
+      const details = Array.from(row.children).map(cell => cell.innerText);
+      alert(`Chi tiết:\nMôn học: ${details[1]}\nThời gian: ${details[2]}\nPhòng: ${details[3]}\nĐịa điểm: ${details[4]}`);
+    });
+  });
+}
+// Hàm lọc các môn học theo tên
+function filterClasses() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const filteredClasses = classSchedule.filter((classItem) =>
+    classItem.name.toLowerCase().includes(query)
+  );
+  renderClassTable(filteredClasses);
+}
+
+// Hàm render bảng lớp học (đã cập nhật)
+function renderClassTable(data) {
+  classTableBody.innerHTML = "";
+  data.forEach((classItem, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${classItem.name}</td>
+      <td>${classItem.time}</td>
+      <td>${classItem.room}</td>
+      <td>${classItem.address}</td>
+    `;
+
+    classTableBody.appendChild(row);
+  });
+}
+    // Render dữ liệu ban đầu
+    renderClassTable(classSchedule);
+    addRowClickEffect();
+  </script>
+</body>
+</html>

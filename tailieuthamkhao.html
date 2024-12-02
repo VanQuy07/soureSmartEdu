@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tài liệu tham khảo</title>
+  <style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 1000px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(45deg, #0066cc, #004d99);
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: #f1f1f1;
+    }
+
+    .search-bar input {
+      padding: 10px 15px;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 500px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-bar input:focus {
+      border-color: #004d99;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .document-list {
+      width: 100%;
+      border-collapse: collapse;
+      min-height: 300px;
+    }
+
+    .document-list th, .document-list td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 1rem;
+    }
+
+    .document-list th {
+      background-color: #004d99;
+      color: white;
+    }
+
+    .document-list tr {
+      transition: background-color 0.3s ease;
+    }
+
+    .document-list tr:hover td {
+      background-color: #e3f2fd;
+    }
+
+    .document-list td a {
+      color: #004d99;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .document-list td a:hover {
+      color: #002d66;
+      transform: scale(1.1);
+    }
+
+    .placeholder-row td {
+      color: #ccc;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #004d99;
+      color: white;
+      font-size: 0.9rem;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      .search-bar input {
+        font-size: 0.9rem;
+      }
+
+      .document-list th, .document-list td {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Tài liệu tham khảo</h1>
+    </header>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Tìm kiếm tài liệu..."
+        oninput="filterTable()"
+      />
+    </div>
+
+    <table class="document-list">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tên tài liệu</th>
+          <th>Loại tài liệu</th>
+          <th>Link tải</th>
+        </tr>
+      </thead>
+      <tbody id="documentTableBody">
+        <!-- Dữ liệu tài liệu sẽ được thêm qua JavaScript -->
+      </tbody>
+    </table>
+
+    <footer class="footer">
+      <p>© 2024 Tài liệu tham khảo. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const documents = [
+      { id: 1, name: "Giải toán lớp 10", type: "Sách giáo khoa", link: "https://example.com/tai-lieu/1" },
+      { id: 2, name: "Lý thuyết hóa học", type: "Bài giảng", link: "https://example.com/tai-lieu/2" },
+      { id: 3, name: "Lịch sử Việt Nam", type: "Sách tham khảo", link: "https://example.com/tai-lieu/3" },
+      { id: 4, name: "Bài tập Vật lý", type: "Bài tập", link: "https://example.com/tai-lieu/4" },
+      { id: 5, name: "Hóa học hữu cơ", type: "Sách giáo khoa", link: "https://example.com/tai-lieu/5" },
+      { id: 6, name: "Ngữ văn lớp 12", type: "Sách giáo khoa", link: "https://example.com/tai-lieu/6" },
+      { id: 7, name: "Kỹ năng lập trình C", type: "Bài giảng", link: "https://example.com/tai-lieu/7" },
+      { id: 8, name: "Lập trình JavaScript", type: "Sách tham khảo", link: "https://example.com/tai-lieu/8" },
+      { id: 9, name: "Sinh học cơ bản", type: "Sách giáo khoa", link: "https://example.com/tai-lieu/9" },
+      { id: 10, name: "Địa lý tự nhiên", type: "Sách tham khảo", link: "https://example.com/tai-lieu/10" }
+    ];
+
+    const documentTableBody = document.getElementById("documentTableBody");
+    const DEFAULT_ROW_COUNT = 10;
+
+    function renderTable(data) {
+      documentTableBody.innerHTML = "";
+
+      for (let i = 0; i < DEFAULT_ROW_COUNT; i++) {
+        const doc = data[i];
+        const row = document.createElement("tr");
+
+        if (doc) {
+          row.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${doc.name}</td>
+            <td>${doc.type}</td>
+            <td><a href="${doc.link}" target="_blank">Tải về</a></td>
+          `;
+        } else {
+          row.className = "placeholder-row";
+          row.innerHTML = `
+            <td colspan="4"></td>
+          `;
+        }
+
+        documentTableBody.appendChild(row);
+      }
+    }
+
+    function filterTable() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = documents.filter((doc) =>
+        doc.name.toLowerCase().includes(query) ||
+        doc.type.toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    }
+
+    renderTable(documents);
+  </script>
+</body>
+</html>

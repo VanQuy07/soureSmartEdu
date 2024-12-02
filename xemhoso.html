@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Hồ Sơ Cá Nhân</title>
+    <style>
+        /* CSS */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f8fe;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(to bottom, #6db9ff, #4a8fff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .banner img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            position: absolute;
+            bottom: -60px;
+            transition: transform 0.3s ease;
+        }
+
+        .banner img:hover {
+            transform: scale(1.1);
+        }
+
+        .content {
+            text-align: center;
+            padding: 70px 30px 30px;
+        }
+
+        h1 {
+            color: #0056b3;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .profile-info {
+            text-align: left;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9fcff;
+            border-radius: 10px;
+            max-width: 600px;
+        }
+
+        .profile-info div {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .profile-info div span:first-child {
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        .profile-info div span:last-child {
+            color: #555;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: #f0f8ff;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="banner">
+            <img src="https://via.placeholder.com/120" alt="Ảnh đại diện" id="profilePicture">
+        </div>
+        <div class="content">
+            <h1>Xem Hồ Sơ Cá Nhân</h1>
+            <div class="profile-info">
+                <div><span>Họ và Tên:</span> <span id="name">Nguyễn Văn A</span></div>
+                <div><span>Ngày Sinh:</span> <span id="dob">01/01/2000</span></div>
+                <div><span>Email:</span> <span id="email">nguyenvana@gmail.com</span></div>
+                <div><span>Số Điện Thoại:</span> <span id="phone">0123456789</span></div>
+                <div><span>Giới Thiệu:</span> <span id="about">Lập trình viên yêu thích công nghệ.</span></div>
+            </div>
+            <button id="editProfile">Chỉnh Sửa Hồ Sơ</button>
+        </div>
+    </div>
+    <footer>
+        © 2024 Hồ Sơ Cá Nhân | Thiết kế bởi Developer
+    </footer>
+    <script>
+        // JavaScript
+        const profileData = {
+            picture: "https://via.placeholder.com/120",
+            name: "Nguyễn Văn A",
+            dob: "01/01/2000",
+            email: "nguyenvana@gmail.com",
+            phone: "0123456789",
+            about: "Lập trình viên yêu thích công nghệ."
+        };
+
+        // Hiển thị dữ liệu hồ sơ
+        const loadProfile = () => {
+            document.getElementById('profilePicture').src = profileData.picture;
+            document.getElementById('name').textContent = profileData.name;
+            document.getElementById('dob').textContent = profileData.dob;
+            document.getElementById('email').textContent = profileData.email;
+            document.getElementById('phone').textContent = profileData.phone;
+            document.getElementById('about').textContent = profileData.about;
+        };
+
+        // Chỉnh sửa hồ sơ (giả lập chức năng)
+        document.getElementById('editProfile').addEventListener('click', () => {
+            alert('Chức năng chỉnh sửa hồ sơ đang được phát triển!');
+        });
+
+        // Tải hồ sơ khi trang được mở
+        window.onload = loadProfile;
+    </script>
+</body>
+</html>

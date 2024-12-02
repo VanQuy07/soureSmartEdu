@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh Sách Yêu Thích</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        .category-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .category-buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .category-buttons button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .favorites-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .favorites-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .favorites-list li:hover {
+            background-color: #e6f7ff;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .favorites-list li span {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .details-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .details-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .details-container h3 {
+            font-size: 1.5em;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .details-container p {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #ccc;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Danh Sách Yêu Thích</h2>
+
+    <!-- Các nút bấm để chọn danh mục yêu thích -->
+    <div class="category-buttons">
+        <button onclick="filterFavorites('giangvien')">Giảng Viên</button>
+        <button onclick="filterFavorites('sach')">Sách</button>
+        <button onclick="filterFavorites('monhoc')">Môn Học</button>
+    </div>
+
+    <ul class="favorites-list" id="favorites-list">
+        <!-- Các mục yêu thích sẽ được hiển thị ở đây -->
+    </ul>
+
+    <p id="empty-message" class="empty-message"></p>
+
+    <!-- Khu vực hiển thị thông tin chi tiết -->
+    <div class="details-container" id="details-container">
+        <h3 id="details-title"></h3>
+        <p id="details-content"></p>
+    </div>
+</div>
+
+<script>
+    const detailsData = {
+        giangvien: {
+            'Giảng viên Nguyễn Văn A (Lập trình Java)': 'Giảng viên Nguyễn Văn A là chuyên gia trong lĩnh vực Lập trình Java với hơn 10 năm kinh nghiệm.',
+            'Giảng viên Lê Minh C (Tiếng Anh)': 'Giảng viên Lê Minh C giảng dạy Tiếng Anh với phương pháp sáng tạo, phù hợp với mọi cấp độ.'
+        },
+        sach: {
+            'Sách học lập trình JavaScript': 'Quyển sách này cung cấp kiến thức cơ bản và nâng cao về lập trình JavaScript, phù hợp với người mới bắt đầu.',
+            'Sách Toán học cho học sinh lớp 12': 'Quyển sách tổng hợp các công thức và bài tập quan trọng cho kỳ thi tốt nghiệp THPT.',
+            'Sách phát triển bản thân': 'Đây là cuốn sách cung cấp những kỹ năng cần thiết để phát triển bản thân và sự nghiệp.'
+        },
+        monhoc: {
+            'Môn học Hóa học cấp 12': 'Môn học Hóa học lớp 12 tập trung vào các kiến thức chuẩn bị cho kỳ thi quốc gia.',
+            'Môn học Lập trình Java': 'Môn học Lập trình Java giúp học viên nắm vững các khái niệm lập trình hướng đối tượng.'
+        }
+    };
+
+    const favorites = {
+        giangvien: Object.keys(detailsData.giangvien),
+        sach: Object.keys(detailsData.sach),
+        monhoc: Object.keys(detailsData.monhoc)
+    };
+
+    let currentCategory = 'giangvien';
+
+    function displayFavorites(category) {
+        const favoritesList = document.getElementById('favorites-list');
+        const emptyMessage = document.getElementById('empty-message');
+        const detailsContainer = document.getElementById('details-container');
+
+        favoritesList.innerHTML = '';
+        detailsContainer.classList.remove('visible');
+
+        if (favorites[category].length === 0) {
+            emptyMessage.textContent = 'Danh sách yêu thích hiện tại đang trống.';
+        } else {
+            emptyMessage.textContent = '';
+            favorites[category].forEach((favorite) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<span>${favorite}</span>`;
+                listItem.onclick = () => showDetails(category, favorite);
+                favoritesList.appendChild(listItem);
+            });
+        }
+    }
+
+    function showDetails(category, favorite) {
+        const detailsTitle = document.getElementById('details-title');
+        const detailsContent = document.getElementById('details-content');
+        const detailsContainer = document.getElementById('details-container');
+
+        detailsTitle.textContent = favorite;
+        detailsContent.textContent = detailsData[category][favorite] || 'Không có thông tin chi tiết.';
+        detailsContainer.classList.add('visible');
+    }
+
+    function filterFavorites(category) {
+        currentCategory = category;
+        displayFavorites(category);
+    }
+
+    displayFavorites(currentCategory);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông báo - Ứng dụng Gia sư</title>
+  <style>
+    /* CSS */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    .notification-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      background-size: 200% 200%;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      animation: gradient-move 4s infinite;
+    }
+    @keyframes gradient-move {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .notification-list {
+      max-width: 600px;
+      margin: 0 auto;
+      list-style: none;
+      padding: 0;
+    }
+
+    .notification-item {
+      background: white;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .notification-item:nth-child(1):hover {
+      background-color: #ffeeba; /* Màu vàng nhạt */
+    }
+
+    .notification-item:nth-child(2):hover {
+      background-color: #d4edda; /* Màu xanh lá nhạt */
+    }
+
+    .notification-item:nth-child(3):hover {
+      background-color: #cce5ff; /* Màu xanh dương nhạt */
+    }
+
+    .notification-item h3 {
+      color: #007bff;   
+      margin: 0;
+    }
+
+    .notification-item p {
+      margin: 0.5rem 0 1rem 0;
+      line-height: 1.6;
+    }
+
+    .notification-item button {
+      background-color: #007bff;     
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .notification-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .footer {
+      text-align: center;
+      background: #222;
+      color: #fff;
+      padding: 0.5rem 0;
+      box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng lên trên */
+    }
+  </style>
+</head>
+<body>
+  <div class="notification-container">
+    <header class="header">
+      <h1>Thông báo</h1>
+    </header>
+    <main class="main">
+      <ul class="notification-list">
+        <li class="notification-item">
+          <h3>Thông báo 1: Cập nhật tính năng</h3>
+          <p>Chúng tôi vừa thêm tính năng chat trực tiếp giữa gia sư và học sinh. Hãy thử ngay!</p>
+          <button onclick="showDetail('Cập nhật tính năng chat trực tiếp giúp gia sư và học sinh liên lạc dễ dàng hơn.')">Xem chi tiết</button>
+        </li>
+        <li class="notification-item">
+          <h3>Thông báo 2: Ưu đãi tháng 12</h3>
+          <p>Nhận ưu đãi giảm giá 20% khi đặt gia sư từ hôm nay đến hết tháng 12.</p>
+          <button onclick="showDetail('Ưu đãi áp dụng cho tất cả các khóa học đăng ký trong tháng 12.')">Xem chi tiết</button>
+        </li>
+        <li class="notification-item">
+          <h3>Thông báo 3: Thêm môn học mới</h3>
+          <p>Ứng dụng hiện đã hỗ trợ các môn học lập trình như Python, Java, và hơn thế nữa.</p>
+          <button onclick="showDetail('Danh sách môn học mới bao gồm: Python, Java, C++ và các môn công nghệ thông tin.')">Xem chi tiết</button>
+        </li>
+      </ul>
+    </main>
+    <footer class="footer">
+      <p>© 2024 Ứng dụng Gia sư. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript
+    function showDetail(message) {
+      alert(message);
+    }
+  </script>
+</body>
+</html>

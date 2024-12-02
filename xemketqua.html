@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xem Kết Quả</title>
+  <style>
+    /* CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Tổng quan */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #eef2f3;
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+
+    /* Tiêu đề */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .header p {
+      font-size: 1rem;
+      color: #7f8c8d;
+    }
+
+    /* Thanh tìm kiếm */
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 15px;
+    }
+
+    .search-bar input {
+      padding: 12px;
+      font-size: 1rem;
+      width: 60%;
+      border-radius: 30px;
+      border: 2px solid #bdc3c7;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      border-color: #27ae60;
+      box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+    }
+
+    /* Bảng kết quả */
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-table th, .result-table td {
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .result-table th {
+      background-color: #27ae60;
+      color: white;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+    }
+
+    .result-table td {
+      font-size: 1rem;
+      color: #34495e;
+    }
+
+    .result-table tr:hover td {
+      background-color: #ecf9f1;
+      transform: scale(1.02);
+      transition: all 0.3s ease;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #27ae60;
+      color: white;
+      font-size: 1rem;
+      margin-top: 50px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    /* Hiệu ứng động */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-table tbody tr {
+      animation: fadeIn 0.5s ease both;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Tiêu đề "Xem Kết Quả" -->
+    <div class="header">
+      <h1>Xem Kết Quả Học Tập</h1>
+      <p>Tra cứu kết quả học tập của bạn một cách nhanh chóng và tiện lợi.</p>
+    </div>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-bar">
+      <input
+        type="text"
+        id="subjectSearch"
+        placeholder="Tìm kiếm theo môn học..."
+        oninput="filterResults()"
+      />
+    </div>
+
+    <!-- Bảng kết quả -->
+    <table class="result-table" id="resultTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Môn Học</th>
+          <th>Điểm</th>
+          <th>Xếp Loại</th>
+        </tr>
+      </thead>
+      <tbody id="resultTableBody">
+        <!-- Các kết quả sẽ được hiển thị tại đây -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>© 2024 Kết quả học tập. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Dữ liệu kết quả
+    const results = [
+      { id: 1, subject: "Toán Học", score: 8.5, grade: "Giỏi" },
+      { id: 2, subject: "Vật Lý", score: 7.0, grade: "Khá" },
+      { id: 3, subject: "Hóa Học", score: 9.0, grade: "Xuất sắc" },
+      { id: 4, subject: "Sinh Học", score: 6.5, grade: "Trung bình" },
+      { id: 5, subject: "Lịch Sử", score: 8.0, grade: "Giỏi" },
+      { id: 6, subject: "Tiếng Anh", score: 7.5, grade: "Khá" },
+      { id: 7, subject: "Văn Học", score: 9.5, grade: "Xuất sắc" },
+      { id: 8, subject: "Địa Lý", score: 6.0, grade: "Trung bình" },
+      { id: 9, subject: "Tin Học", score: 8.2, grade: "Giỏi" },
+      { id: 10, subject: "Thể Dục", score: 7.8, grade: "Khá" }
+    ];
+
+    const resultTableBody = document.getElementById("resultTableBody");
+
+    // Hàm để render danh sách kết quả
+    function renderResults(data) {
+      resultTableBody.innerHTML = "";
+      data.forEach((result, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${result.subject}</td>
+          <td>${result.score}</td>
+          <td>${result.grade}</td>
+        `;
+        resultTableBody.appendChild(row);
+      });
+    }
+
+    // Hàm tìm kiếm kết quả chi tiết
+    function filterResults() {
+      const subjectQuery = document.getElementById("subjectSearch").value.toLowerCase();
+
+      const filteredResults = results.filter(result => {
+        const matchesSubject = result.subject.toLowerCase().includes(subjectQuery);
+        return matchesSubject;
+      });
+
+      renderResults(filteredResults);
+    }
+
+    // Render kết quả ban đầu
+    renderResults(results);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Khóa Học</title>
+  <style>
+    /* CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Tổng quan */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(120deg, #f0f4ff, #e0f7fa);
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 0;
+    }
+    
+
+    /* Tiêu đề */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      color: #4CAF50;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Thanh tìm kiếm */
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center; /* Canh giữa theo chiều dọc */
+      margin-bottom: 30px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      width: auto;
+      max-width: 600px;
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      border-radius: 20px;
+      border: 2px solid #ddd;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+    }
+    /* Hiệu ứng động */
+    #animationContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Không ảnh hưởng đến các hành động chuột */
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .cart-button {
+      margin-left: 10px;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      background-color: #2196F3; /* Xanh dễ nhìn hơn */
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      position: relative; /* Để định vị số lượng */
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .cart-button:hover {
+      background-color: #1976D2;
+      transform: scale(1.1);
+    }
+    .cart-button #cartCount {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #FF5722; /* Đỏ nổi bật */
+      color: white;
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 50%;
+      display: inline-block;
+      min-width: 20px;
+      text-align: center;
+    }
+    /* Các khóa học */
+    .courses-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    /* Card khóa học */
+    .course-card {
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .course-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .course-card .course-details {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .course-card h3 {
+      font-size: 1.8rem;
+      color: #4CAF50;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .course-card p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    /* Buttons */
+    .course-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .course-card button {
+      padding: 12px 25px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .course-card button:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-add-to-cart {
+      background-color: #FF9800;
+    }
+
+    .btn-add-to-cart:hover {
+      background-color: #FF8C00; /* Màu thay đổi khi hover */
+    }
+
+    .btn-add-to-cart-hover {
+      background-color: #4CAF50;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px 10px;
+      background: linear-gradient(120deg, #4CAF50, #388E3C);
+      color: white;
+      font-size: 1rem;
+      margin-top: 50px;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Tiêu đề "Trang khóa học" -->
+    <div class="header">
+      <h1>Trang Khóa Học</h1>
+    </div>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Tìm khóa học..."
+        oninput="filterCourses()"
+      />
+      <a href="cart.html">
+      <button class="cart-button" onclick="viewCart()">
+        🛒 <span id="cartCount">0</span>
+      </button>
+    </a>
+    </div>
+    
+    <!-- Container hiệu ứng -->
+    <div id="animationContainer"></div>
+
+    <!-- Danh sách khóa học -->
+    <div id="courses" class="courses-container">
+      <!-- Các khóa học sẽ được hiển thị tại đây -->
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2024 Khóa học trực tuyến. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Dữ liệu khóa học với hình ảnh
+    const courses = [
+      { id: 1, title: "Lập trình JavaScript Cơ bản", description: "Khóa học này sẽ giúp bạn nắm vững JavaScript từ cơ bản đến nâng cao.", image: "https://via.placeholder.com/300x200?text=JavaScript" },
+      { id: 2, title: "Lập trình Python", description: "Khóa học lập trình Python dành cho người mới bắt đầu, dễ hiểu và dễ tiếp cận.", image: "https://via.placeholder.com/300x200?text=Python" },
+      { id: 3, title: "Thiết kế Web với HTML & CSS", description: "Khóa học thiết kế giao diện web đẹp mắt và chuẩn SEO với HTML và CSS.", image: "https://via.placeholder.com/300x200?text=Web+Design" },
+      { id: 4, title: "Học C++ từ cơ bản đến nâng cao", description: "Khóa học C++ này giúp bạn học từ các khái niệm cơ bản đến các kỹ thuật nâng cao trong lập trình C++.", image: "https://via.placeholder.com/300x200?text=C++" },
+      { id: 5, title: "Cơ sở dữ liệu MySQL", description: "Khóa học về MySQL sẽ giúp bạn làm quen và quản lý cơ sở dữ liệu hiệu quả.", image: "https://via.placeholder.com/300x200?text=MySQL" },
+      { id: 6, title: "Dự án web full-stack", description: "Khóa học này dạy bạn xây dựng dự án web full-stack, từ front-end đến back-end.", image: "https://via.placeholder.com/300x200?text=Full+Stack" },
+    ];
+
+    const coursesContainer = document.getElementById("courses");
+  
+    function renderCourses(data) {
+      coursesContainer.innerHTML = "";
+      data.forEach(course => {
+        const courseCard = document.createElement("div");
+        courseCard.classList.add("course-card");
+        courseCard.innerHTML = `
+          <img src="${course.image}" alt="${course.title}">
+          <div class="course-details">
+            <h3>${course.title}</h3>
+            <p>${course.description}</p>
+            <div class="course-buttons">
+              <!-- Liên kết đến trang thanh toán -->
+              <a href="thanhtoantructuyen.html"?courseId=${course.id}">
+                <button>Mua khóa học</button>
+              </a>
+              <button class="btn-add-to-cart" onclick="addToCart(${course.id})">Thêm vào giỏ hàng</button>
+            </div>
+          </div>
+        `;
+
+        coursesContainer.appendChild(courseCard);
+      });
+    }
+
+    function filterCourses() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const filteredCourses = courses.filter(course => 
+        course.title.toLowerCase().includes(query) || 
+        course.description.toLowerCase().includes(query)
+      );
+      renderCourses(filteredCourses);
+    }
+
+    function addToCart(courseId) {
+      const course = courses.find(c => c.id === courseId);
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (!cart.some(item => item.id === course.id)) {
+        cart.push(course);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`Đã thêm "${course.title}" vào giỏ hàng!`);
+        updateCartCount();
+      } else {
+        alert("Khóa học đã có trong giỏ hàng!");
+      }
+    }
+
+    function updateCartCount() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      document.getElementById("cartCount").textContent = cart.length;
+    }
+
+    renderCourses(courses);
+    updateCartCount();
+  </script>
+
+</body>
+</html>

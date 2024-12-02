@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch sử bài tập</title>
+  <style>
+    /* CSS */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7; /* Nền xám nhạt để dễ nhìn */
+      color: #444; /* Màu chữ tối hơn để dễ đọc */
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      color: white;
+      padding: 15px 0;
+      border-radius: 8px 8px 0 0;
+      animation: gradientMove 5s infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .search-bar {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-bar input {
+      width: 80%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Ánh sáng xanh */
+      border-color: #4CAF50; /* Đổi màu viền */
+    }
+
+    .history-table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      background-color: #f0f0f0; /* Màu xám nhạt */
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .history-table th, .history-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .history-table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .history-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      background-color: #f7f7f7; /* Màu nền mặc định */
+      transition: background-color 0.3s ease; /* Hiệu ứng mượt */
+    }
+
+    .history-table td:hover {
+      background-color: #e0e0e0; /* Màu xám đậm hơn khi hover */
+      cursor: pointer; /* Thêm con trỏ pointer để nhấn mạnh */
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .history-table tr {
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .history-table tr:hover {
+      background-color: #e8f5e9; /* Màu xanh nhạt */
+      transform: scale(1.02); /* Phóng to nhẹ */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Tạo đổ bóng */
+    }
+
+    button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    button:hover {
+      background-color: #45a049; /* Đổi màu nút */
+      transform: translateY(-2px); /* Nút di chuyển nhẹ lên trên */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng */
+    }
+
+    button[style="background-color: red;"] {
+      background-color: red;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button[style="background-color: red;"]:hover {
+      background-color: #e53935; /* Màu đỏ nhạt hơn */
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #222;
+      color: white;
+      border-radius: 0 0 8px 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Lịch sử bài tập</h1>
+    </header>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Tìm kiếm bài tập theo tên..."
+        oninput="filterTable()"
+      />
+    </div>
+
+    <!-- Bảng lịch sử bài tập -->
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tên bài tập</th>
+          <th>Ngày hoàn thành</th>
+          <th>Chi tiết</th>
+          <th>Xóa</th>
+        </tr>
+      </thead>
+      <tbody id="historyTableBody">
+        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+      </tbody>
+    </table>
+
+    <footer class="footer">
+      <p>© 2024 Ứng dụng Gia sư. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript
+
+    // Dữ liệu bài tập (đã thêm nhiều bài tập)
+    let exerciseHistory = [
+      { id: 1, name: "Toán lớp 10 - Phương trình bậc 2", date: "2024-11-20", details: "Hoàn thành 90%, còn lỗi ở câu 3." },
+      { id: 2, name: "Hóa học - Cân bằng phương trình", date: "2024-11-22", details: "Đạt điểm tối đa, rất tốt!" },
+      { id: 3, name: "Tiếng Anh - Chia động từ", date: "2024-11-25", details: "Cần cải thiện cách dùng thì quá khứ." },
+      { id: 4, name: "Vật lý - Định luật Newton", date: "2024-11-23", details: "Hiểu tốt, cần tập trung vào câu hỏi bài tập thực tế." },
+      { id: 5, name: "Sinh học - Di truyền học", date: "2024-11-24", details: "Làm sai phần quy luật Mendel." },
+      { id: 6, name: "Toán lớp 11 - Hình học không gian", date: "2024-11-26", details: "Hiểu bài nhanh, làm đúng 100%." },
+      { id: 7, name: "Hóa học - Hóa hữu cơ", date: "2024-11-27", details: "Hoàn thành đầy đủ, cần học thêm lý thuyết phản ứng." },
+      { id: 8, name: "Lịch sử - Chiến tranh thế giới thứ 2", date: "2024-11-18", details: "Hiểu tốt, bổ sung thêm thông tin về các sự kiện chính." },
+      { id: 9, name: "Địa lý - Địa chất Việt Nam", date: "2024-11-15", details: "Cần cải thiện kỹ năng đọc bản đồ." },
+      { id: 10, name: "Tin học - Lập trình Python cơ bản", date: "2024-11-14", details: "Hoàn thành xuất sắc, sẵn sàng học nâng cao." }
+    ];
+
+    const historyTableBody = document.getElementById("historyTableBody");
+
+    // Hàm render danh sách bài tập
+    function renderTable(data) {
+      historyTableBody.innerHTML = "";
+      data.forEach((exercise, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${exercise.name}</td>
+          <td>${exercise.date}</td>
+          <td><button onclick="showDetails('${exercise.details}')">Xem chi tiết</button></td>
+          <td><button onclick="deleteExercise(${exercise.id})" style="background-color: red;">Xóa</button></td>
+        `;
+
+        historyTableBody.appendChild(row);
+      });
+    }
+
+    // Hiển thị chi tiết bài tập
+    function showDetails(details) {
+      alert(details);
+    }
+
+    // Xóa bài tập với hiệu ứng mờ dần
+      function deleteExercise(id) {
+        const rowToDelete = [...historyTableBody.children].find((row) => 
+          row.querySelector('td').textContent == exerciseHistory.find(ex => ex.id === id).id
+        );
+        rowToDelete.style.transition = "opacity 0.5s ease";
+        rowToDelete.style.opacity = "0";
+
+        setTimeout(() => {
+          exerciseHistory = exerciseHistory.filter((exercise) => exercise.id !== id);
+          renderTable(exerciseHistory);
+        }, 500); // Đợi hiệu ứng mờ hoàn tất trước khi xóa
+      }
+
+    // Tìm kiếm bài tập
+    function filterTable() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = exerciseHistory.filter((exercise) =>
+        exercise.name.toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    }
+
+    // Render dữ liệu ban đầu
+    renderTable(exerciseHistory);
+  </script>
+</body>
+</html>
